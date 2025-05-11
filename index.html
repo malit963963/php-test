@@ -1,3 +1,13 @@
+<?php
+session_start();
+
+// בדוק אם יש הודעה ב-SESSION
+$response = null;
+if (isset($_SESSION['response'])) {
+    $response = $_SESSION['response'];
+    unset($_SESSION['response']); // מחק את ההודעה לאחר הצגתה
+}
+?>
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
@@ -82,6 +92,11 @@
 </head>
 <body>
     <div class="container">
+        <?php
+        if ($response) {
+            echo "<div class='message {$response['type']}'>{$response['message']}</div>";
+        }
+        ?>
         <div id="choiceSection">
             <h2>ברוך הבא!</h2>
             <p style="text-align: center;">האם אתה משתמש רשום?</p>

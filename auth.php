@@ -1,11 +1,12 @@
 <?php
-// filepath: c:\xampp\htdocs\php-test\auth.php
 session_start();
 $conn = new mysqli("localhost", "root", "", "php_test"); // עדכן את פרטי החיבור ל-DB
 
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
+
+$response = []; // משתנה לאחסון הודעות
 
 // פונקציית הרשמה
 if (isset($_POST['signup'])) {
@@ -17,9 +18,9 @@ if (isset($_POST['signup'])) {
     $stmt->bind_param("sss", $username, $email, $password);
 
     if ($stmt->execute()) {
-        echo "Signup successful!";
+        $response = ["type" => "success", "message" => "הרשמה בוצעה בהצלחה!"];
     } else {
-        echo "Error: " . $stmt->error;
+        $response = ["type" => "error", "message" => "שגיאה בהרשמה: " . $stmt->error];
     }
     $stmt->close();
 }
@@ -40,30 +41,52 @@ if (isset($_POST['login'])) {
 
         if (password_verify($password, $hashed_password)) {
             $_SESSION['user_id'] = $id;
-            echo "Login successful!";
+            $response = ["type" => "success", "message" => "התחברות בוצעה בהצלחה!"];
         } else {
-            echo "Invalid password.";
+            $response = ["type" => "error", "message" => "סיסמה שגויה."];
         }
     } else {
-        echo "No user found with this email.";
+        $response = ["type" => "error", "message" => "לא נמצא משתמש עם האימייל הזה."];
     }
     $stmt->close();
 }
 
-// פונקציית שחזור סיסמה
+// פונקציית שחזור סיסמה ללא שימוש במייל
 if (isset($_POST['forgot_password'])) {
     $email = $_POST['email'];
-    $new_password = bin2hex(random_bytes(4)); // סיסמה חדשה אקראית
-    $hashed_password = password_hash($new_password, PASSWORD_BCRYPT);
 
-    $stmt = $conn->prepare("UPDATE users SET password = ? WHERE email = ?");
-    $stmt->bind_param("ss", $hashed_password, $email);
+    // בדוק אם המייל קיים במערכת
+    $stmt = $conn->prepare("SELECT id FROM users WHERE email = ?");
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $stmt->store_result();
 
-    if ($stmt->execute() && $stmt->affected_rows > 0) {
-        echo "Your new password is: $new_password";
+    if ($stmt->num_rows > 0) {
+        $token = bin2hex(random_bytes(16)); // צור טוקן ייחודי
+        $expiry = date("Y-m-d H:i:s", strtotime("+1 hour")); // תוקף של שעה
+
+        // שמור את הטוקן במסד הנתונים
+        $stmt->bind_result($user_id);
+        $stmt->fetch();
+        $stmt->close();
+
+        $stmt = $conn->prepare("INSERT INTO password_resets (user_id, token, expiry) VALUES (?, ?, ?)");
+        $stmt->bind_param("iss", $user_id, $token, $expiry);
+        $stmt->execute();
+        $stmt->close();
+
+        // הצג את הקישור לאיפוס הסיסמה
+        $reset_link = "http://localhost/php-test/reset_password.php?token=$token";
+        $response = ["type" => "success", "message" => "קישור לאיפוס סיסמה: <a href='$reset_link'>$reset_link</a>"];
     } else {
-        echo "No user found with this email.";
+        $response = ["type" => "error", "message" => "לא נמצא משתמש עם האימייל הזה."];
     }
-    $stmt->close();
 }
+
+// שמירת ההודעה ב-SESSION
+$_SESSION['response'] = $response;
+
+// חזרה לדף הראשי
+header("Location: index.php");
+exit();
 ?>
