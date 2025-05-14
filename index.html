@@ -41,11 +41,27 @@
         </form>
 
         <!-- טופס שכחתי סיסמה -->
-        <form id="forgotPasswordForm" style="display: none;" onsubmit="event.preventDefault(); submitForm('forgot_password');">
+        <!-- <form id="forgotPasswordForm" style="display: none;" onsubmit="event.preventDefault(); submitForm('forgotPassword');">
             <h2>שכחתי סיסמה</h2>
             <input type="email" name="email" placeholder="אימייל" required>
             <button type="submit">אפס סיסמה</button>
-        </form>
+        </form> -->
+
+        <!-- כפתור שכחתי סיסמה -->
+        <div id="forgotPasswordSection" style="display: none;">
+            <button id="forgotPasswordButton">שכחתי סיסמה</button>
+        </div>
+
+        <!-- טופס הגדרת סיסמה חדשה -->
+        <div id="resetPasswordSection" style="display: none;">
+            <form id="resetPasswordForm">
+                <h2>הגדר סיסמה חדשה</h2>
+                <input type="email" id="resetEmail" placeholder="אימייל" required>
+                <input type="password" id="newPassword" placeholder="סיסמה חדשה" required>
+                <input type="password" id="confirmPassword" placeholder="אימות סיסמה" required>
+                <button type="submit" id="savePasswordBtn" style="display:none;">שמור</button>
+            </form>
+        </div>
     </div>
 
     <!-- חלון Popup -->
@@ -56,5 +72,7 @@
             <button class="close-btn" onclick="closePopup()">סגור</button>
         </div>
     </div>
+
+   
 </body>
 </html>

@@ -1,4 +1,4 @@
-        body {
+body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f9;
             margin: 0;
@@ -19,6 +19,7 @@
         h2 {
             text-align: center;
             color: #333;
+            margin-bottom: 20px;
         }
         form {
             display: flex;
@@ -112,4 +113,29 @@
         }
         .close-btn:hover {
             background-color: #0056b3;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table th, table td {
+            border: 1px solid #212020;
+            padding: 10px;
+            text-align: left;
+        }
+
+        table th {
+            background-color: #f4f4f9;
+            color: #333;
+            font-weight: bold;
+        }
+
+        table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        table tr:hover {
+            background-color: #f1f1f1;
         }
