@@ -21,14 +21,14 @@ if ($conn->connect_error) {
     exit();
 }
 
-if (isset($_POST['action'])) {
-    if ($_POST['action'] === 'signup') {
-        $username = $_POST['username'];
-        $email = $_POST['email'];
-        $password = password_hash($_POST['password'], PASSWORD_BCRYPT);
-    echo json_encode(["type" => "error", "message" => "שגיאה בחיבור למסד הנתונים."]);
-    exit();
-}
+// if (isset($_POST['action'])) {
+//     if ($_POST['action'] === 'signup') {
+//         $username = $_POST['username'];
+//         $email = $_POST['email'];
+//         $password = password_hash($_POST['password'], PASSWORD_BCRYPT);
+//     echo json_encode(["type" => "error", "message" => "שגיאה בחיבור למסד הנתונים."]);
+//     exit();
+// }
 
 if (isset($_POST['action'])) {
     if ($_POST['action'] === 'signup') {
