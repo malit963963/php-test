@@ -112,21 +112,13 @@ if (isset($_POST['action'])) {
             echo json_encode(["type" => "error", "message" => "לא נמצא משתמש עם האימייל הזה."]);
         }
     } elseif ($_POST['action'] === 'get_users') {
-        // בדוק אם המשתמש מחובר
-        if (!isset($_SESSION['logged_in']) || !$_SESSION['logged_in']) {
-            echo json_encode(["type" => "error", "message" => "עליך להתחבר כדי לצxxx ברשימת המשתמשים."]);
-            exit();
-        }
-
-        // שלוף את כל המשתמשים
         $result = $conn->query("SELECT username, email FROM users");
         $users = [];
-
         while ($row = $result->fetch_assoc()) {
             $users[] = $row;
         }
-
         echo json_encode(["type" => "success", "users" => $users]);
+        exit();
     } elseif ($_POST['action'] === 'resetPassword') {
         $email = $_POST['email'];
         $password = password_hash($_POST['password'], PASSWORD_BCRYPT);

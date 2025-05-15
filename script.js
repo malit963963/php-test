@@ -1,6 +1,8 @@
 function showLogin() {
-    document.getElementById('choiceSection').style.display = 'none';
+    document.getElementById('usersSection').style.display = 'none';
     document.getElementById('loginForm').style.display = 'block';
+    document.getElementById('signupForm').style.display = 'none';
+    document.getElementById('resetPasswordSection').style.display = 'none';
 }
 
 function showSignUp() {
@@ -28,6 +30,7 @@ function showMessage(type, text) {
     messageSection.style.display = 'block';
 }
 
+// התחברות
 function submitForm(action) {
     const form = document.getElementById(action + 'Form');
     if (!form) {
@@ -44,22 +47,16 @@ function submitForm(action) {
     })
     .then(response => response.json())
     .then(data => {
-        // הצג תמיד ב-Popup
+        showPopup(data.type, data.message);
         if (data.type === 'success') {
-            showPopup('success', data.message);
-
-            // מעבר אוטומטי לטופס התחברות אחרי הרשמה מוצלחת
-            if (action === 'signup') {
+            if (action === 'login' || action === 'signup') {
                 setTimeout(() => {
-                    document.getElementById('signupForm').style.display = 'none';
-                    document.getElementById('loginForm').style.display = 'block';
-                }, 2000);
+                    getUsers();
+                }, 1500);
             }
-        } else {
-            showPopup('error', data.message);
         }
     })
-    .catch(error => {
+    .catch(() => {
         showPopup('error', 'שגיאה בתקשורת עם השרת.');
     });
 }
@@ -147,7 +144,7 @@ document.getElementById('resetPasswordForm').addEventListener('submit', function
         showPopup(data.type, data.message);
         if (data.type === 'success') {
             setTimeout(() => {
-                document.getElementById('resetPasswordSection').style.display = 'none';
+                getUsers();
             }, 1500);
         }
     })
@@ -164,9 +161,10 @@ function getUsers() {
     .then(response => response.json())
     .then(data => {
         if (data.type === 'success') {
-            let usersTable = `
+            let html = `
                 <h2>רשימת משתמשים</h2>
-                <table>
+                <button class="back-btn" onclick="showLogin()">חזור</button>
+                <table class="users-table">
                     <thead>
                         <tr>
                             <th>שם משתמש</th>
@@ -176,33 +174,24 @@ function getUsers() {
                     <tbody>
             `;
             data.users.forEach(user => {
-                usersTable += `
+                html += `
                     <tr>
                         <td>${user.username}</td>
                         <td>${user.email}</td>
                     </tr>
                 `;
             });
-            usersTable += `
+            html += `
                     </tbody>
                 </table>
-                <button onclick="showLogin()" style="margin-top: 20px; padding: 10px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;">חזור</button>
             `;
-            const usersSection = document.getElementById('usersSection');
-            usersSection.innerHTML = usersTable;
-            usersSection.style.display = 'block'; // הצג את הטבלה
-
-            // הסתר את כל הטפסים
-            document.getElementById('loginForm').style.display = 'none';
-            document.getElementById('signupForm').style.display = 'none';
-            document.getElementById('forgotPasswordForm').style.display = 'none';
-            document.getElementById('choiceSection').style.display = 'none';
+            document.getElementById('usersSection').innerHTML = html;
+            document.getElementById('usersSection').style.display = 'block';
         } else {
             showPopup('error', data.message);
         }
     })
-    .catch(error => {
-        console.error(error); // הדפס את השגיאה לקונסול
-        showPopup('error', 'אירעה שגיאה. נסה שוב מאוחר יותר.');
+    .catch(() => {
+        showPopup('error', 'שגיאה בקבלת המשתמשים.');
     });
 }

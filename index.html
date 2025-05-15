@@ -34,9 +34,15 @@
         <!-- טופס הרשמה -->
         <form id="signupForm" style="display: none;" onsubmit="event.preventDefault(); submitForm('signup');">
             <h2>הרשמה</h2>
-            <input type="text" name="username" placeholder="שם משתמש" required>
-            <input type="email" name="email" placeholder="אימייל" required>
-            <input type="password" name="password" placeholder="סיסמה" required>
+            <div class="form-group">
+                <input type="text" name="username" placeholder="שם משתמש" required>
+            </div>
+            <div class="form-group">
+                <input type="email" name="email" placeholder="אימייל" required>
+            </div>
+            <div class="form-group">
+                <input type="password" name="password" placeholder="סיסמה" required>
+            </div>
             <button type="submit">הרשם</button>
         </form>
 
