@@ -14,8 +14,18 @@ header('Content-Type: application/json');
 
 session_start();
 $conn = new mysqli("localhost", "root", "", "php_test");
+$conn = new mysqli("localhost", "root", "", "php_test");
 
 if ($conn->connect_error) {
+    echo json_encode(["type" => "error", "message" => "שגיאה בחיבור למסד הנתונים."]);
+    exit();
+}
+
+if (isset($_POST['action'])) {
+    if ($_POST['action'] === 'signup') {
+        $username = $_POST['username'];
+        $email = $_POST['email'];
+        $password = password_hash($_POST['password'], PASSWORD_BCRYPT);
     echo json_encode(["type" => "error", "message" => "שגיאה בחיבור למסד הנתונים."]);
     exit();
 }
@@ -84,6 +94,10 @@ if (isset($_POST['action'])) {
 
         $email = $_POST['email'];
 
+        $stmt = $conn->prepare("SELECT id FROM users WHERE email = ?");
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $stmt->store_result();
         $stmt = $conn->prepare("SELECT id FROM users WHERE email = ?");
         $stmt->bind_param("s", $email);
         $stmt->execute();

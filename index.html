@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <script src="script.js" defer></script>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
     <title>מערכת התחברות</title>
 </head>
 <body>
@@ -19,12 +21,15 @@
         </div>
 
         <div id="usersSection"></div>
+        <div id="usersSection"></div>
 
         <!-- טופס התחברות -->
+        <form id="loginForm" style="display: none;" onsubmit="event.preventDefault(); submitForm('login');">
         <form id="loginForm" style="display: none;" onsubmit="event.preventDefault(); submitForm('login');">
             <h2>התחברות</h2>
             <input type="email" name="email" placeholder="אימייל" required>
             <input type="password" name="password" placeholder="סיסמה" required>
+            <button type="submit">התחבר</button>
             <button type="submit">התחבר</button>
             <div class="link">
                 <a href="#" onclick="showForgotPassword()">שכחתי סיסמה</a>
@@ -32,6 +37,7 @@
         </form>
 
         <!-- טופס הרשמה -->
+        <form id="signupForm" style="display: none;" onsubmit="event.preventDefault(); submitForm('signup');">
         <form id="signupForm" style="display: none;" onsubmit="event.preventDefault(); submitForm('signup');">
             <h2>הרשמה</h2>
             <div class="form-group">
