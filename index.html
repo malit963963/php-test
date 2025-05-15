@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <script src="script.js" defer></script>
     <title>מערכת התחברות</title>
 </head>
+
 <body>
     <div class="container">
         <div id="choiceSection">
@@ -20,18 +22,22 @@
 
         <div id="usersSection"></div>
 
-        <!-- טופס התחברות -->
         <form id="loginForm" style="display: none;" onsubmit="event.preventDefault(); submitForm('login');">
             <h2>התחברות</h2>
-            <input type="email" name="email" placeholder="אימייל" required>
-            <input type="password" name="password" placeholder="סיסמה" required>
+            <div class="form-group">
+
+                <input type="email" name="email" placeholder="אימייל" required>
+            </div>
+            <div class="form-group">
+
+                <input type="password" name="password" placeholder="סיסמה" required>
+            </div>
             <button type="submit">התחבר</button>
             <div class="link">
                 <a href="#" onclick="showForgotPassword()">שכחתי סיסמה</a>
             </div>
         </form>
 
-        <!-- טופס הרשמה -->
         <form id="signupForm" style="display: none;" onsubmit="event.preventDefault(); submitForm('signup');">
             <h2>הרשמה</h2>
             <div class="form-group">
@@ -46,19 +52,10 @@
             <button type="submit">הרשם</button>
         </form>
 
-        <!-- טופס שכחתי סיסמה -->
-        <!-- <form id="forgotPasswordForm" style="display: none;" onsubmit="event.preventDefault(); submitForm('forgotPassword');">
-            <h2>שכחתי סיסמה</h2>
-            <input type="email" name="email" placeholder="אימייל" required>
-            <button type="submit">אפס סיסמה</button>
-        </form> -->
-
-        <!-- כפתור שכחתי סיסמה -->
         <div id="forgotPasswordSection" style="display: none;">
             <button id="forgotPasswordButton">שכחתי סיסמה</button>
         </div>
 
-        <!-- טופס הגדרת סיסמה חדשה -->
         <div id="resetPasswordSection" style="display: none;">
             <form id="resetPasswordForm">
                 <h2>הגדר סיסמה חדשה</h2>
@@ -70,7 +67,6 @@
         </div>
     </div>
 
-    <!-- חלון Popup -->
     <div id="popup" class="popup">
         <div id="popupContent" class="popup-content">
             <h3 id="popupTitle"></h3>
@@ -79,6 +75,7 @@
         </div>
     </div>
 
-   
+
 </body>
+
 </html>

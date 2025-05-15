@@ -1,16 +1,5 @@
 <?php
 header('Content-Type: application/json');
-// ini_set('display_errors', 1);
-// error_reporting(E_ALL);
-// require 'PHPMailer/src/PHPMailer.php';
-// require 'PHPMailer/src/SMTP.php';
-// require 'PHPMailer/src/Exception.php';
-// require 'PHPMailer/src/POP3.php';
-
-// use PHPMailer\PHPMailer\PHPMailer;
-// use PHPMailer\PHPMailer\Exception;
-// use PHPMailer\PHPMailer\POP3;
-// use PHPMailer\PHPMailer\SMTP; 
 
 session_start();
 $conn = new mysqli("localhost", "root", "", "php_test");
@@ -21,14 +10,7 @@ if ($conn->connect_error) {
     exit();
 }
 
-// if (isset($_POST['action'])) {
-//     if ($_POST['action'] === 'signup') {
-//         $username = $_POST['username'];
-//         $email = $_POST['email'];
-//         $password = password_hash($_POST['password'], PASSWORD_BCRYPT);
-//     echo json_encode(["type" => "error", "message" => "שגיאה בחיבור למסד הנתונים."]);
-//     exit();
-// }
+
 
 if (isset($_POST['action'])) {
     if ($_POST['action'] === 'signup') {
@@ -36,7 +18,6 @@ if (isset($_POST['action'])) {
         $email = $_POST['email'];
         $password = password_hash($_POST['password'], PASSWORD_BCRYPT);
 
-        // בדוק אם האימייל כבר קיים
         $stmt = $conn->prepare("SELECT id FROM users WHERE email = ?");
         $stmt->bind_param("s", $email);
         $stmt->execute();
@@ -63,7 +44,6 @@ if (isset($_POST['action'])) {
         $email = $_POST['email'];
         $password = $_POST['password'];
 
-        // בדוק אם האימייל קיים במערכת
         $stmt = $conn->prepare("SELECT id, password FROM users WHERE email = ?");
         $stmt->bind_param("s", $email);
         $stmt->execute();
@@ -108,17 +88,14 @@ if (isset($_POST['action'])) {
             $stmt->fetch();
             $stmt->close();
 
-            // צור טוקן ייחודי
             $token = bin2hex(random_bytes(16));
             $expiry = date("Y-m-d H:i:s", strtotime("+1 hour"));
 
-            // שמור את הטוקן במסד הנתונים
             $stmt = $conn->prepare("INSERT INTO password_resets (user_id, token, expiry) VALUES (?, ?, ?)");
             $stmt->bind_param("iss", $user_id, $token, $expiry);
             $stmt->execute();
             $stmt->close();
 
-            // החזר את הטוקן בתגובה
             $_SESSION['logged_in'] = true;
             $_SESSION['logged_in_user_id'] = $user_id;
             echo json_encode(["type" => "success", "message" => "הכנס סיסמה חדשה.", "token" => $token]);

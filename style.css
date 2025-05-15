@@ -107,7 +107,6 @@ button:hover, .close-btn:hover {
     text-align: center;
 }
 
-/* טבלת משתמשים מודרנית */
 .users-table {
     width: 100%;
     border-collapse: collapse;
@@ -145,7 +144,7 @@ button:hover, .close-btn:hover {
     transition: background 0.2s;
 }
 
-/* Popup */
+
 .popup {
     display: none;
     position: fixed;

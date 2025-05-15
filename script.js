@@ -1,19 +1,28 @@
-function showLogin() {
-    document.getElementById('usersSection').style.display = 'none';
-    document.getElementById('loginForm').style.display = 'block';
-    document.getElementById('signupForm').style.display = 'none';
-    document.getElementById('resetPasswordSection').style.display = 'none';
-}
-
-function showSignUp() {
-    document.getElementById('choiceSection').style.display = 'none';
-    document.getElementById('signupForm').style.display = 'block';
-}
-
-// הצג טופס הגדרת סיסמה חדשה בלחיצה על "שכחתי סיסמה"
-function showForgotPassword() {
+function hideAllSections() {
     document.getElementById('loginForm').style.display = 'none';
     document.getElementById('signupForm').style.display = 'none';
+    document.getElementById('resetPasswordSection').style.display = 'none';
+    document.getElementById('choiceSection').style.display = 'none';
+
+    document.getElementById('usersSection').style.display = 'none';
+    if (document.getElementById('forgotPasswordSection')) {
+        document.getElementById('forgotPasswordSection').style.display = 'none';
+    }
+    if (document.getElementById('mainButtons')) {
+        document.getElementById('mainButtons').style.display = 'none';
+    }
+}
+
+function showLogin() {
+    hideAllSections();
+    document.getElementById('loginForm').style.display = 'block';
+}
+function showSignUp() {
+    hideAllSections();
+    document.getElementById('signupForm').style.display = 'block';
+}
+function showForgotPassword() {
+    hideAllSections();
     document.getElementById('resetPasswordSection').style.display = 'block';
     document.getElementById('resetEmail').value = '';
     document.getElementById('newPassword').value = '';
@@ -21,7 +30,6 @@ function showForgotPassword() {
     document.getElementById('savePasswordBtn').style.display = 'none';
 }
 
-// פונקציה להצגת הודעה
 function showMessage(type, text) {
     const messageSection = document.getElementById('messageSection');
     const messageDiv = document.getElementById('message');
@@ -30,7 +38,6 @@ function showMessage(type, text) {
     messageSection.style.display = 'block';
 }
 
-// התחברות
 function submitForm(action) {
     const form = document.getElementById(action + 'Form');
     if (!form) {
@@ -61,7 +68,6 @@ function submitForm(action) {
     });
 }
 
-// דוגמה לפונקציית showPopup
 function showPopup(type, message) {
     const popupTitle = document.getElementById('popupTitle');
     const popupMessage = document.getElementById('popupMessage');
@@ -77,40 +83,28 @@ function closePopup() {
     document.getElementById('popup').style.display = 'none';
 }
 
-// בדוק אם המשתמש מחובר לפני הצגת כפתור שכחתי סיסמה
 document.addEventListener('DOMContentLoaded', function () {
     fetch('auth.php', {
         method: 'POST',
-        body: new URLSearchParams({ action: 'check_login' }) // פעולה לבדיקה אם המשתמש מחובר
+        body: new URLSearchParams({ action: 'check_login' })
     })
     .then(response => response.json())
     .then(data => {
         if (data.type === 'success') {
-            // הצג את כפתור שכחתי סיסמה
             document.getElementById('forgotPasswordButton').style.display = 'block';
         } else {
-            // הסתר את כפתור שכחתי סיסמה
             document.getElementById('forgotPasswordButton').style.display = 'none';
         }
     })
     .catch(error => {
-        console.error('Error:', error);
         document.getElementById('forgotPasswordButton').style.display = 'none';
     });
 });
 
-// הצגת טופס להזנת סיסמה חדשה בלבד
-document.getElementById('forgotPasswordButton').addEventListener('click', function () {
-    document.getElementById('forgotPasswordSection').style.display = 'none';
-    document.getElementById('loginForm').style.display = 'none';
-    document.getElementById('signupForm').style.display = 'none';
-    document.getElementById('resetPasswordSection').style.display = 'block';
-    document.getElementById('newPassword').value = '';
-    document.getElementById('confirmPassword').value = '';
-    document.getElementById('savePasswordBtn').style.display = 'none';
-});
+document.getElementById('goToLoginBtn')?.addEventListener('click', showLogin);
+document.getElementById('goToSignupBtn')?.addEventListener('click', showSignUp);
+document.getElementById('forgotPasswordButton')?.addEventListener('click', showForgotPassword);
 
-// הצג כפתור "שמור" רק כשהסיסמאות זהות ולא ריקות
 document.getElementById('newPassword').addEventListener('input', checkPasswordsMatch);
 document.getElementById('confirmPassword').addEventListener('input', checkPasswordsMatch);
 
@@ -125,7 +119,6 @@ function checkPasswordsMatch() {
     }
 }
 
-// שליחת סיסמה חדשה
 document.getElementById('resetPasswordForm').addEventListener('submit', function (e) {
     e.preventDefault();
     const email = document.getElementById('resetEmail').value;
@@ -161,6 +154,7 @@ function getUsers() {
     .then(response => response.json())
     .then(data => {
         if (data.type === 'success') {
+            hideAllSections();
             let html = `
                 <h2>רשימת משתמשים</h2>
                 <button class="back-btn" onclick="showLogin()">חזור</button>
